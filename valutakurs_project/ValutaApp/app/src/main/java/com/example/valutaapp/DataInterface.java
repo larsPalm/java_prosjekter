@@ -9,17 +9,19 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class DataInterface {
     Context context;
     ServerInterface si;
     SharedPrefInterface spi;
     private static final String TAG = "DataInterface";
-    //public static MutableLiveData<LinkedList<Claim>> livedata = new MutableLiveData<LinkedList<Claim>>();
+    //public static MutableLiveData<LinkedList<String>> livedata = new MutableLiveData<LinkedList<String>>();
 
     public DataInterface(Context context) {
         this.context = context;
@@ -72,5 +74,18 @@ public class DataInterface {
                 }
             });
         }
+    }
+    public void getImg(String from,String to){
+        Log.d(TAG,"from_cur "+from+",to_cur:"+to);
+        si.volleyGet("compareImg2/"+from+"/"+to, new Callback() {
+            @Override
+            public void callback(Object data) {
+                if(data instanceof String) {
+                    spi.storeImg((String)data);
+                } else {
+                    Toast.makeText(context, "Invalid response from server", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }

@@ -69,6 +69,12 @@ public class SharedPrefInterface {
         editor.apply();
     }
 
+    public void storeImg(String imgString){
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("img", imgString);
+        editor.apply();
+    }
+
     public String getDate(){
         return sharedPref.getString("dato", "");
     }
@@ -80,4 +86,9 @@ public class SharedPrefInterface {
     public Set<String> getBaseCur(){
         return sharedPref.getStringSet("baseCur",null);
     }
+
+    public String getImg(){
+        return sharedPref.getString("img", "0");
+    }
+
 }

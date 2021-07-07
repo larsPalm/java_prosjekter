@@ -19,6 +19,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/to_cur"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btntoImg"
+            android:text="to img"
+            android:onClick="toImg"/>
     </LinearLayout>
 
     <LinearLayout

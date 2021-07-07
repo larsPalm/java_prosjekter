@@ -2,6 +2,7 @@ package com.example.valutaapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,5 +51,10 @@ public class MainActivity extends AppCompatActivity {
             String to = spinnerTo.getSelectedItem().toString();
             tw.setText(String.format("%.2f %s = %.2f %s", value,from,newVal,to));
         }
+    }
+
+    public void toImg(View view) {
+        Intent intent = new Intent(MainActivity.this, ImgActivity.class);
+        startActivity(intent);
     }
 }
