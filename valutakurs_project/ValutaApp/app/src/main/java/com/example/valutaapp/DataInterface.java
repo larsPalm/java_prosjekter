@@ -21,7 +21,7 @@ public class DataInterface {
     ServerInterface si;
     SharedPrefInterface spi;
     private static final String TAG = "DataInterface";
-    //public static MutableLiveData<LinkedList<String>> livedata = new MutableLiveData<LinkedList<String>>();
+    public static MutableLiveData<String> livedata = new MutableLiveData<String>();
 
     public DataInterface(Context context) {
         this.context = context;
@@ -87,5 +87,8 @@ public class DataInterface {
                 }
             }
         });
+    }
+    public void getStoredImg(){
+        livedata.setValue(spi.getImg());
     }
 }

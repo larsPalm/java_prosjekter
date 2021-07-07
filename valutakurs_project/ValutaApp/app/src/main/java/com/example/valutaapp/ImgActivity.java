@@ -1,6 +1,10 @@
 package com.example.valutaapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -18,6 +22,7 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import android.util.Base64;
 
@@ -29,6 +34,7 @@ public class ImgActivity extends AppCompatActivity {
     Spinner spinnerTo;
     Activity activity;
     ImageView img;
+    private ViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,17 @@ public class ImgActivity extends AppCompatActivity {
         spinnerTo.setAdapter(spinnerArrayAdapter);
         spinnerFrom.setAdapter(spinnerArrayAdapter);
         img = (ImageView) findViewById(R.id.img);
+        viewModel = new ViewModelProvider(this).get(ImgViewModel.class);
+        final Observer<String> imgObserver = new Observer<String>(){
+            @Override
+            public void onChanged(@Nullable final String imgString){
+                byte[] decodedString = Base64.decode(imgString, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                img.setImageBitmap(decodedByte);
+            }
+        };
+        ((ImgViewModel) viewModel).getCurrentImg().observe(this, imgObserver);
+        new DataInterface(this).getStoredImg();
     }
 
     public void fetchImg(View view) {
@@ -55,6 +72,7 @@ public class ImgActivity extends AppCompatActivity {
         String urlString = "http://10.0.2.2:8080/compareImg2/"+v1+"/"+v2;
         Log.d(TAG,urlString);
         Log.d(TAG,new SharedPrefInterface(this).getImg());
+        new DataInterface(this).getStoredImg();
         byte[] decodedString = Base64.decode(new SharedPrefInterface(this).getImg(), Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         img.setImageBitmap(decodedByte);
