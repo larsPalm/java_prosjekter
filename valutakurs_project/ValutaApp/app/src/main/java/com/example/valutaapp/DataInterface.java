@@ -33,20 +33,8 @@ public class DataInterface {
         Log.d(TAG,new SharedPrefInterface(context).getDate());
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();
-        String date = dtf.format(now);
-        Log.d(TAG,date);
-        spi.putDate("");
-        String value = new SharedPrefInterface(context).getDate();
-        int compare = value.compareTo(date);
-        int compare2 = date.compareTo(date);
-        int compare3 = "2021-07-10".compareTo(date);
-        Log.d(TAG,String.valueOf(compare));
-        Log.d(TAG,String.valueOf(compare2));
-        Log.d(TAG,String.valueOf(compare3));
         String oldDate = new SharedPrefInterface(context).getDate();
         String currentDate = dtf.format(now);
-        Log.d(TAG,oldDate+"   "+currentDate);
-        Log.d(TAG,"---"+String.valueOf(oldDate.compareTo(currentDate)<0));
         if(oldDate.compareTo(currentDate)<0){
             si.volleyGet("latestValues/", new Callback() {
                 @Override
@@ -68,7 +56,7 @@ public class DataInterface {
                                 spi.putData((String)data,currentDate);
                                 spi.putDate(currentDate);
                             }
-                            catch (Throwable t){}
+                            catch (Throwable t){return;}
                         }
                     }
                 }

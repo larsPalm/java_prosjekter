@@ -52,7 +52,7 @@ public class SharedPrefInterface {
 
     public void putDate(String date){
         SharedPreferences.Editor editor = sharedPref.edit();
-        Log.d(TAG,"insert:"+date);
+        Log.d(TAG,"insert: "+date);
         editor.putString("dato", date);
         editor.apply();
     }

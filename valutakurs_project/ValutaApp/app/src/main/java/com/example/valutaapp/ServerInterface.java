@@ -29,18 +29,10 @@ public class ServerInterface {
         RequestQueue queue = Volley.newRequestQueue(context);
 
         StringRequest sr = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        success.callback(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG,"Got error when querying on: " + url + " error: " + error.toString());
-                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
-                    }
+                response -> success.callback(response),
+                error -> {
+                    Log.d(TAG,"Got error when querying on: " + url + " error: " + error.toString());
+                    Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
                 });
         queue.add(sr);
     }
@@ -49,18 +41,10 @@ public class ServerInterface {
         RequestQueue queue = Volley.newRequestQueue(context);
 
         StringRequest sr = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        success.callback(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG,"Got error when querying on: " + url + " error: " + error.toString());
-                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
-                    }
+                response -> success.callback(response),
+                error -> {
+                    Log.d(TAG,"Got error when querying on: " + url + " error: " + error.toString());
+                    Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
                 });
         queue.add(sr);
     }
