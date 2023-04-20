@@ -7,6 +7,10 @@ import lombok.Setter;
 
 @Getter @Setter
 @Entity(name= "endpoints_currencyvalue")
+@NamedNativeQuery(name="Currency.getAllCurrencyValues",
+        query = "SELECT * FROM endpoints_currencyvalue",
+        resultClass = Currency.class
+)
 public class Currency {
 
     public Currency(){}

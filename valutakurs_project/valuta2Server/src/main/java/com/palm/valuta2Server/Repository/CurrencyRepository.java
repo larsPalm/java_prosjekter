@@ -36,6 +36,8 @@ public  interface CurrencyRepository  extends JpaRepository<Currency, Long>{
     @Query("SELECT ec FROM endpoints_currencyvalue ec WHERE ec.dato = :dato AND ec.cur_name =:cur_name")
     Currency getSample(@Param("dato") String dato, @Param("cur_name") String name);
 
+    List<Currency> getAllCurrencyValues();
+
 }
 
 
