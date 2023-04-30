@@ -86,7 +86,7 @@ public class Controller {
         return currencyHandler.makePresentableDataUserBaseline(baseline);
     }
 
-    @GetMapping(value="/allValuesInterval",produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/allValuesIntervalBaseline",produces=MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> allDataFromBaselineInterval(@RequestParam("base") String baseline,
                                                            @RequestParam("fromValue") String fromValue,
                                                            @RequestParam("toValue") String toValue){
@@ -102,9 +102,18 @@ public class Controller {
             errorMap.put("dateCode","toValue and/or from were incorrect");
             errorMap.put("dateReason","make sure the values are dates and follows yyyy-mm-dd format");
         }
-        Map<String,Object> returnMap = new HashMap<>();
-        returnMap.put("info", "not implemented yet");
-        return returnMap;
+       return currencyHandler.makePresentableDataUserBaselineInterval(baseline,fromValue,toValue);
+    }
+    @GetMapping(value="/allValuesInterval",produces=MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> allDataInterval(@RequestParam("fromValue") String fromValue,
+                                               @RequestParam("toValue") String toValue){
+        Map<String,Object> errorMap = new HashMap<>();
+        if(!currencyHandler.validDateFormat(fromValue) || !currencyHandler.validDateFormat(toValue)){
+            errorMap.put("baseMessage", "incorrect date format provided for toValue and/or fromValue");
+            errorMap.put("dateCode","toValue and/or from were incorrect");
+            errorMap.put("dateReason","make sure the values are dates and follows yyyy-mm-dd format");
+        }
+        return currencyHandler.makePresentableDataUserBaselineInterval("NOK",fromValue,toValue);
     }
     @GetMapping("/testInputValidation")
     public Map<String, Object> testDates(){

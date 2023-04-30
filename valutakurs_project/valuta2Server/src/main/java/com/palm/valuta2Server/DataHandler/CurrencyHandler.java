@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -75,6 +76,21 @@ public class CurrencyHandler {
         }
         return sortHashmap2(presentableData);
     }
+    public Map<String, Object> makePresentableDataUserBaselineInterval(String base, String fromValue, String toValue){
+        List<String> dates = cr.getAllDatesInInterval(fromValue, toValue);
+        Map<String,List<Currency>> rawData = getRawData(dates);
+        Map<String,Map<String,Double>> presentableData = new LinkedHashMap<>();
+        for(Map.Entry<String, List<Currency>> set :
+                rawData.entrySet()){
+            Map<String,Double> data = new TreeMap<>();
+            for(Currency cur:set.getValue()){
+                Currency baselineValue = cr.getSample(cur.getDato(), base.toUpperCase());
+                data.put(cur.getCur_name(), (cur.getValue()/baselineValue.getValue()));
+            }
+            presentableData.put(set.getKey(),data);
+        }
+        return sortHashmap2(presentableData);
+    }
 
     public String storeData(String payload){
         try{
@@ -120,6 +136,10 @@ public class CurrencyHandler {
 
     private List<String >getDates(){
         return cr.getAllDates();
+    }
+
+    private List<String> getDatesInInterval( String toValue, String fromValue){
+        return cr.getAllDatesInInterval(fromValue,toValue);
     }
 
     private Map<String,List<Currency>> getRawData(List<String> dates){
