@@ -75,7 +75,43 @@ public class Controller {
         return currencyHandler.storeData(payload);
     }
     @GetMapping(value="/allValues",produces=MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Map<String,Double>> allDataFromBaseline(@RequestParam("base") String baseline){
+    public Map<String, Object> allDataFromBaseline(@RequestParam("base") String baseline){
+        if(!currencyHandler.validCurName(baseline)){
+            Map<String,Object> errorMap = new HashMap<>();
+            errorMap.put("message","wanted baseline is not supported");
+            errorMap.put("code","baseline not found");
+            errorMap.put("reason","baseline may be spelled wrong");
+            return errorMap;
+        }
         return currencyHandler.makePresentableDataUserBaseline(baseline);
+    }
+
+    @GetMapping(value="/allValuesInterval",produces=MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> allDataFromBaselineInterval(@RequestParam("base") String baseline,
+                                                           @RequestParam("fromValue") String fromValue,
+                                                           @RequestParam("toValue") String toValue){
+        Map<String,Object> errorMap = new HashMap<>();
+        if(!currencyHandler.validCurName(baseline)){
+            errorMap.put("baseMessage","wanted baseline is not supported");
+            errorMap.put("baseCode","baseline not found");
+            errorMap.put("baseReason","baseline may be spelled wrong");
+            return errorMap;
+        }
+        if(!currencyHandler.validDateFormat(fromValue) || !currencyHandler.validDateFormat(toValue)){
+            errorMap.put("baseMessage", "incorrect date format provided for toValue and/or fromValue");
+            errorMap.put("dateCode","toValue and/or from were incorrect");
+            errorMap.put("dateReason","make sure the values are dates and follows yyyy-mm-dd format");
+        }
+        Map<String,Object> returnMap = new HashMap<>();
+        returnMap.put("info", "not implemented yet");
+        return returnMap;
+    }
+    @GetMapping("/testInputValidation")
+    public Map<String, Object> testDates(){
+        Map<String,Object> theMap = new HashMap<>();
+        theMap.put("invalid date format", currencyHandler.validDateFormat("2022/02/02"));
+        theMap.put("valid date format", currencyHandler.validDateFormat("2022-02-02"));
+        theMap.put("not a date", currencyHandler.validDateFormat("hei"));
+        return theMap;
     }
 }

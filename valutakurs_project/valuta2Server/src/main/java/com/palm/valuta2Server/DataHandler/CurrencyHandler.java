@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
@@ -58,7 +59,7 @@ public class CurrencyHandler {
         return sortHashmap(presentableData);
     }
 
-    public Map<String,Map<String,Double>> makePresentableDataUserBaseline(String base){
+    public Map<String, Object> makePresentableDataUserBaseline(String base){
         List<String> dates = getDates();
         //Collections.sort(dates);
         Map<String,List<Currency>> rawData = getRawData(dates);
@@ -72,7 +73,7 @@ public class CurrencyHandler {
             }
             presentableData.put(set.getKey(),data);
         }
-        return sortHashmap(presentableData);
+        return sortHashmap2(presentableData);
     }
 
     public String storeData(String payload){
@@ -106,6 +107,17 @@ public class CurrencyHandler {
         return sortedHashmap;
     }
 
+    private Map<String,Object> sortHashmap2(Map<String,Map<String,Double>> inputData){
+        //taken from geeks for geeks: https://www.geeksforgeeks.org/sorting-hashmap-according-key-value-java/
+        TreeMap<String, Map<String,Double>> sorted = new TreeMap<>(inputData);
+        Map<String,Object> sortedHashmap = new LinkedHashMap<>();
+        for (Map.Entry<String, Map<String,Double>> entry : sorted.entrySet()){
+            //System.out.println("dato= "+entry.getKey());
+            sortedHashmap.put(entry.getKey(),entry.getValue());
+        }
+        return sortedHashmap;
+    }
+
     private List<String >getDates(){
         return cr.getAllDates();
     }
@@ -116,5 +128,27 @@ public class CurrencyHandler {
             rawData.put(date,cr.getAllValuesDate(date));
         }
         return rawData;
+    }
+
+    public boolean insideInterval(String date){
+        return date.compareTo(cr.getOldestDate()) >= 0 && date.compareTo(cr.getNewestDate())<=0;
+    }
+
+    public boolean validDateFormat(String date){
+        String format = "yyyy-mm-dd";
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(format);
+        try {
+            dateFormatter.parse(date);
+            return true;
+        } catch (Exception e){return false;}
+    }
+
+    public boolean validCurName(String base){
+        for(String element: cr.getBaseCurs()){
+            if(base.toUpperCase().equals(element)){
+                return true;
+            }
+        }
+        return false;
     }
 }

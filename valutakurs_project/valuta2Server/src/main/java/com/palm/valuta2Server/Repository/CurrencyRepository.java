@@ -38,6 +38,10 @@ public  interface CurrencyRepository  extends JpaRepository<Currency, Long>{
 
     List<Currency> getAllCurrencyValues();
 
+    List<Currency> getAllValuesInInterval(String fromValue, String toValue);
+
+    List<Currency> getAllValuesInIntervalOneCurrency(String fromValue, String toValue, String curName);
+
 }
 
 

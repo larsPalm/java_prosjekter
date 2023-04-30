@@ -11,6 +11,13 @@ import lombok.Setter;
         query = "SELECT * FROM endpoints_currencyvalue",
         resultClass = Currency.class
 )
+@NamedNativeQuery(name="Currency.getAllValuesInInterval",
+        query = "SELECT * FROM endpoints_currencyvalue WHERE dato > :fromValue AND dato < toValue"
+)
+@NamedNativeQuery(name="Currency.getAllValuesInIntervalOneCurrency",
+        query = "SELECT * FROM endpoints_currencyvalue WHERE dato > :fromValue AND " +
+                "dato < toValue AND cur_name= :curName"
+)
 public class Currency {
 
     public Currency(){}
