@@ -15,6 +15,9 @@ public class Controller {
     @Autowired
     private CurrencyRepository cr;
 
+    @Autowired
+    private CurrencyHandler currencyHandler;
+
     @GetMapping(value="/",produces= MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> index() {
         Map<String,String> info = new HashMap<>();
@@ -48,7 +51,7 @@ public class Controller {
     }
     @GetMapping(value="/newestEach")
     public Map<String,Double> getNewestEach(){
-        return new CurrencyHandler().newestEach(cr);
+        return currencyHandler.newestEach();
     }
     @GetMapping("/allDates")
     public List<String> allDates(){
@@ -60,15 +63,19 @@ public class Controller {
     }
     @GetMapping(value="/allData",produces= MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Map<String,Double>> getAllDataV2(){
-        return new CurrencyHandler().makePresentableDataV2(cr);
+        return currencyHandler.makePresentableDataV2();
     }
     @GetMapping(value="/get_info",produces= MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Map<String,Double>> getAllData(){
-        return new CurrencyHandler().makePresentableData(cr);
+        return currencyHandler.makePresentableData();
     }
     @PostMapping("/insert_data")
     public String storeData(@RequestBody String payload){
         //System.out.println(payload);
-        return new CurrencyHandler().storeData(payload, cr);
+        return currencyHandler.storeData(payload);
+    }
+    @GetMapping(value="/allValues",produces=MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Map<String,Double>> allDataFromBaseline(@RequestParam("base") String baseline){
+        return currencyHandler.makePresentableDataUserBaseline(baseline);
     }
 }
