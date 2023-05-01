@@ -92,6 +92,23 @@ public class CurrencyHandler {
         return sortHashmap2(presentableData);
     }
 
+    public Map<String, Object> compareCurrencies(String fromValue, String base, String fromDate, String toDate){
+        List<String> dates = cr.getAllDatesInInterval(fromDate, toDate);
+        Map<String, List<String>> rawData = new HashMap<>();
+        for(String dato:dates){
+            rawData.put(dato,cr.getAllValuesInIntervalDoneProcessed(base, fromValue, dato));
+        }
+        Map<String,Object> presentableData = new LinkedHashMap<>();
+        for(Map.Entry<String, List<String>> set :
+                rawData.entrySet()){
+            System.out.println(set);
+            String cur = set.getValue().get(0);
+            String[] curValues = cur.replace("{","").replace("}","").split(",");
+            presentableData.put(set.getKey(),Double.parseDouble(curValues[2]));
+        }
+        return presentableData;
+    }
+
     public String storeData(String payload){
         try{
             JSONObject jsonObj = new JSONObject((String) payload);

@@ -115,6 +115,14 @@ public class Controller {
         }
         return currencyHandler.makePresentableDataUserBaselineInterval("NOK",fromValue,toValue);
     }
+
+    @GetMapping("/compareCurrencies")
+    public Map<String, Object>  compareCurrencies(@RequestParam("fromValue")String fromValue, 
+    @RequestParam("base")String base, @RequestParam("fromDate")String fromDate, 
+    @RequestParam("toDate")String toDate){
+        return currencyHandler.compareCurrencies(fromValue,base,fromDate,toDate);
+    }
+
     @GetMapping("/testInputValidation")
     public Map<String, Object> testDates(){
         Map<String,Object> theMap = new HashMap<>();
