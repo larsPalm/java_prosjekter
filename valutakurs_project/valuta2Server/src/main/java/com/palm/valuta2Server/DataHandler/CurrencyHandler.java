@@ -94,19 +94,24 @@ public class CurrencyHandler {
 
     public Map<String, Object> compareCurrencies(String fromValue, String base, String fromDate, String toDate){
         List<String> dates = cr.getAllDatesInInterval(fromDate, toDate);
-        Map<String, List<String>> rawData = new HashMap<>();
+        Map<String, Object> returnMap = new HashMap<>();
+        Map<String, Double> rawData = new HashMap<>();
         for(String dato:dates){
             rawData.put(dato,cr.getAllValuesInIntervalDoneProcessed(base, fromValue, dato));
         }
-        Map<String,Object> presentableData = new LinkedHashMap<>();
-        for(Map.Entry<String, List<String>> set :
-                rawData.entrySet()){
-            System.out.println(set);
-            String cur = set.getValue().get(0);
-            String[] curValues = cur.replace("{","").replace("}","").split(",");
-            presentableData.put(set.getKey(),Double.parseDouble(curValues[2]));
-        }
-        return presentableData;
+        Map<String, String> infoMapCurrencies = new HashMap<>();
+        infoMapCurrencies.put("from", fromValue);
+        infoMapCurrencies.put("comparedTo", base);
+        Map<String, String> infoMapDates = new HashMap<>();
+        infoMapDates.put("from", fromDate);
+        infoMapDates.put("to", toDate);
+        Map<String, Object> metaData = new HashMap<>();
+        metaData.put("currencies", infoMapCurrencies);
+        metaData.put("timePeriod", infoMapDates);
+        metaData.put("dates", dates);
+        returnMap.put("meteData", metaData);
+        returnMap.put("data", rawData);
+        return returnMap;
     }
 
     public String storeData(String payload){
